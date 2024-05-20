@@ -1,22 +1,15 @@
 #!/usr/bin/env python3
-
-"""
- arr = [9, 8, 2, 3, 9, 4, 1, 0, 3]
-  this module will return the size of the array
-  """
+'''
+    This script has a function that calculates the shape of a matrix
+'''
 
 
-  def matrix_shape(matrix):
-          """
-              matrix: list of list
-                  return: list of integers
-                      """
-                          shape = []
-                              while type(matrix) == list:
-                                          shape.append(len(matrix))
-                                                  matrix = matrix[0]
-                                                      return shape
-
-
-                                                  if __name__ == "__main__":
-                                                          matrix_shape_function = __import__('2-size_me_please').matrix_shape
+def matrix_shape(matrix):
+    '''
+        Calculates the shape of a matrix
+    '''
+    mat_shape = []
+    while isinstance(matrix, list):
+        mat_shape.append(len(matrix))
+        matrix = matrix[0]
+    return mat_shape
