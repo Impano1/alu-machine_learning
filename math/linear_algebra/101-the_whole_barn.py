@@ -4,6 +4,7 @@
     that adds two matrices
 '''
 
+
 def add_matrices(mat1, mat2):
     '''
         A function def add_matrices(mat1, mat2):
