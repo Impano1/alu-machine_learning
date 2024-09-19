@@ -1,4 +1,6 @@
-ne-Hot Encode
+#!/usr/bin/env python3
+
+""" One-Hot Encode
 """
 
 
@@ -22,4 +24,3 @@ def one_hot_encode(Y, classes):
         return one_hot
     except Exception:
         return None
-
