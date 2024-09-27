@@ -18,7 +18,7 @@ def l2_reg_gradient_descent(Y, weights, cache, alpha, lam, L):
 
     weights (dict): Is a dictionary storing the weights of the neural
     network. It includes keys such as W1, W2 and b2 for the weights of
-    layer 1, layer 2 and the bias of layer 2 respectively. It's values
+    layer 1, layer 2 and the bias of layer 2 respectively. Its values
     are numpy arrays storing the actual weights.
 
     cache (dict): Is a dictionary storing the outputs of each layer of
@@ -35,3 +35,23 @@ def l2_reg_gradient_descent(Y, weights, cache, alpha, lam, L):
     Returns:
     None.
     """
+    m = Y.shape[1]  # number of examples
+    dZ = cache[f'A{L}'] - Y  # derivative of cost w.r.t Z[L] (output layer)
+    
+    for layer in reversed(range(1, L + 1)):
+        A_prev = cache[f'A{layer - 1}'] if layer > 1 else cache['A0']  # Previous activation
+        
+        # Gradient of weight (with L2 regularization)
+        dW = (1 / m) * np.dot(dZ, A_prev.T) + (lam / m) * weights[f'W{layer}']
+        
+        # Gradient of bias
+        db = (1 / m) * np.sum(dZ, axis=1, keepdims=True)
+        
+        # Update weights and biases
+        weights[f'W{layer}'] -= alpha * dW
+        weights[f'b{layer}'] -= alpha * db
+        
+        if layer > 1:
+            # Compute dZ for the previous layer
+            dZ = np.dot(weights[f'W{layer}'].T, dZ) * (1 - A_prev ** 2)  # Derivative of tanh
+
