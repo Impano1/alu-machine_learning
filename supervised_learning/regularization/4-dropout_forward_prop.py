@@ -1,4 +1,5 @@
-rd Propagation with Dropout """
+#!/usr/bin/env python3
+""" Forward Propagation with Dropout """
 
 
 import numpy as np
