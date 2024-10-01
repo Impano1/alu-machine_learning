@@ -1,21 +1,16 @@
 #!/usr/bin/env python3
-""" Implements l2_reg_cost
+""" L2 Regularization Cost
 """
+
+
 import tensorflow as tf
 
 
 def l2_reg_cost(cost):
-    """ Calculates the l2 cost of a tensorflow network.
-    Parameters:
-    cost (tensorflow.Tensor): a tensor representing the cost
-    of the network without the l2 regularisation term.
+    """ Calculates the cost of a neural network with L2 regularization
 
-    Returns:
-    tensorflow.Tensor: a tensor representing the cost of the
-    network with the l2 regularisation term.
+    Args:
+        cost (float): is a tensor containing the cost of the network
+        without L2 regularization
     """
-    weights = tf.trainable_weights()
-
-    l2_term = tf.add_n([tf.reduce_sum(tf.square(w)) for w in weights])
-
-    return cost + l2_term
+    return cost + tf.losses.get_regularization_losses()
