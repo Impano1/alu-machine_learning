@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 """Class Neuron that defines a single neuron performing binary classification
 """
@@ -46,4 +45,3 @@ class Neuron:
     def A(self):
         """Return output"""
         return self.__A
-
