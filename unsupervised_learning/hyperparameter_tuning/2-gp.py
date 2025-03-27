@@ -1,53 +1,34 @@
 #!/usr/bin/env python3
-'''
-    function def absorbing(P): that
-    determines if a markov chain is absorbing
-'''
 
+"""
+This module determines if markov chain
+is absorbing"""
 
 import numpy as np
 
 
 def absorbing(P):
-    '''
-    Determines if a markov chain is absorbing
-    '''
-    # Input validation
-    if not isinstance(P, np.ndarray) or len(P.shape) != 2:
-        return False
-    n1, n2 = P.shape
-    if n1 != n2:
-        return False
+    """
+    determines steady state probabilities
+    of a markov chain
 
-    absorbing_states = []
-    for i in range(n1):
-        if P[i][i] == 1:
-            absorbing_states.append(i)
+    P - square 2D numpy.ndarray: (n, n) -transition matrix
+        - P[i, j] - probability of transitioning from
+    state i to state j
+        - n no. of states in the markov chain
 
-    # Must have at least one absorbing state
-    if not absorbing_states:
+    Returns: True if it is absorbing,
+        or False on failure
+    """
+    # absorbing states are states that have a probability of 1
+    # of transitioning to themselves
+    if type(P) is not np.ndarray or len(P.shape) != 2:
         return False
-
-    non_absorbing = [
-        i for i in range(n1) if i not in absorbing_states
-        ]
-    if not non_absorbing:
+    n, n = P.shape
+    if n != P.shape[0]:
+        return False
+    if np.sum(P, axis=1).all() != 1:
+        return False
+    if np.any(np.diag(P) == 1):
         return True
-
-    # Create reachability matrix through matrix powers
-    reachable = P.copy()
-    for _ in range(n1-1):
-        reachable = np.matmul(reachable, P)
-
-    # Check if each non-absorbing state can
-    # reach at least one absorbing state
-    for state in non_absorbing:
-        can_reach_absorbing = False
-        for abs_state in absorbing_states:
-            if reachable[state][abs_state] > 0:
-                can_reach_absorbing = True
-                break
-        if not can_reach_absorbing:
-            return False
-
-    return True
+    return False
