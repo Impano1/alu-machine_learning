@@ -8,7 +8,8 @@ def P_init(X, perplexity):
     """Initializes all variables required to calculate the P affinities in t-SNE.
 
     Args:
-        X: numpy.ndarray of shape (n, d) containing the dataset to be transformed
+        X: numpy.ndarray of shape (n, d) containing the dataset to be
+           transformed
         perplexity: the perplexity that all Gaussian distributions should have
 
     Returns:
