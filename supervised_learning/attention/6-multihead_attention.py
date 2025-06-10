@@ -1,4 +1,6 @@
- a class that inherits from tensorflow.keras.layers.Layer
+#!/usr/bin/env python3
+"""
+Defines a class that inherits from tensorflow.keras.layers.Layer
 to perform multi head attention
 """
 
