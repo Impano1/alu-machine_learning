@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
+"""
+t-SNE module to perform dimensionality reduction on a dataset.
+"""
+
 import numpy as np
 pca = __import__('1-pca').pca
 P_affinities = __import__('4-P_affinities').P_affinities
 grads = __import__('6-grads').grads
 cost = __import__('7-cost').cost
+
 
 def tsne(X, perplexity, iterations=1000, dim=2):
     """Performs a t-SNE transformation on dataset X"""
@@ -14,7 +19,7 @@ def tsne(X, perplexity, iterations=1000, dim=2):
     final_momentum = 0.8
 
     # Reduce dimensionality with PCA first
-    X_pca = pca(X, ndim=50)  # as required for t-SNE preprocessing
+    X_pca = pca(X, ndim=50)  # PCA preprocessing for t-SNE
 
     # Compute P affinities
     P = P_affinities(X_pca, perplexity=perplexity)
@@ -28,7 +33,7 @@ def tsne(X, perplexity, iterations=1000, dim=2):
     iY = np.zeros((n, dim))  # momentum term
 
     for i in range(iterations):
-        dY = grads(Y, P)  # Compute gradient from provided grads function
+        dY = grads(Y, P)  # Compute gradient
         iY = momentum * iY - eta * dY  # momentum update
         Y += iY  # update Y positions
 
