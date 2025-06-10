@@ -1,46 +1,43 @@
 #!/usr/bin/env python3
 import numpy as np
-P_init = __import__('5-P_init').P_init
-calculate_p_grad = __import__('6-P_grad').P_grad
-calculate_cost = __import__('4-cost').cost
+pca = __import__('1-pca').pca
+P_affinities = __import__('4-P_affinities').P_affinities
+grads = __import__('6-grads').grads
+cost = __import__('7-cost').cost
 
-def tsne(X, perplexity, iterations=1000, alpha=500.0, dim=2):
-    """Performs a t-SNE transformation"""
+def tsne(X, perplexity, iterations=1000, dim=2):
+    """Performs a t-SNE transformation on dataset X"""
     n, d = X.shape
+    alpha = 500.0
+    eta = alpha
     momentum = 0.5
     final_momentum = 0.8
-    eta = alpha
+
+    # Reduce dimensionality with PCA first
+    X_pca = pca(X, ndim=50)  # as required for t-SNE preprocessing
 
     # Compute P affinities
-    P = P_init(X, perplexity=perplexity)
-    P = P + P.T  # Symmetrize
-    P /= np.sum(P)  # Normalize
-    P = np.maximum(P, 1e-12)  # Prevent numerical errors
+    P = P_affinities(X_pca, perplexity=perplexity)
+    P = P + P.T  # Symmetrize P
+    P = P / np.sum(P)  # Normalize P
+    P = np.maximum(P, 1e-12)  # Avoid numerical instability
 
-    # Initialize Y randomly
+    # Initialize low-dimensional Y randomly
     Y = np.random.randn(n, dim)
     dY = np.zeros((n, dim))
     iY = np.zeros((n, dim))  # momentum term
 
     for i in range(iterations):
-        Q, dQ = calculate_p_grad(Y)
-        Q = np.maximum(Q, 1e-12)  # Avoid division by zero
+        dY = grads(Y, P)  # Compute gradient from provided grads function
+        iY = momentum * iY - eta * dY  # momentum update
+        Y += iY  # update Y positions
 
-        # Compute gradient
-        grad = 4 * (P - Q) * dQ
-        dY = np.dot(grad, Y)
-
-        # Update Y using gradient and momentum
-        iY = momentum * iY - eta * dY
-        Y += iY
-
-        # Adjust momentum
         if i >= 250:
-            momentum = final_momentum
+            momentum = final_momentum  # switch to final momentum
 
-        # Compute and print cost every 100 iterations
+        # Print cost every 100 iterations
         if (i + 1) % 100 == 0:
-            C = calculate_cost(P, Q)
+            C = cost(P, Y)
             print("Cost at iteration {}: {}".format(i + 1, C))
 
     return Y
