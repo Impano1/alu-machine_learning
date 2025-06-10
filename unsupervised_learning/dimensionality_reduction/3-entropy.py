@@ -16,14 +16,9 @@ def HP(Di, beta):
         Pi: numpy.ndarray of shape (n - 1,) containing the P affinities
     """
     Pi = np.exp(-Di * beta)
-
     sum_Pi = np.sum(Pi)
     if sum_Pi == 0:
         sum_Pi = 1e-8
-
     Pi = Pi / sum_Pi
-
     Hi = -np.sum(Pi * np.log2(Pi + 1e-10))
-
     return Hi, Pi
-
