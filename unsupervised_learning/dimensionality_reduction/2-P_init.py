@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Initialize variables for t-SNE."""
+"""Initialize variables for t-SNE.
+"""
 
 import numpy as np
 
