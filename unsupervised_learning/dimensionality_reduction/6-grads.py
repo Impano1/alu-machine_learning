@@ -10,10 +10,10 @@ def grads(Y, P):
 
     Args:
         Y: numpy.ndarray of shape (n, ndim) - low-dimensional embedding
-        P: numpy.ndarray of shape (n, n) - high-dimensional affinities (P matrix)
+        P: numpy.ndarray of shape (n, n) - high-dimensional affinities
 
     Returns:
-        dY: numpy.ndarray of shape (n, ndim) - gradients of Y (no scalar 4 multiplier)
+        dY: numpy.ndarray of shape (n, ndim) - gradients of Y without scalar 4
         Q: numpy.ndarray of shape (n, n) - low-dimensional affinities
     """
     Q_affinities = __import__('5-Q_affinities').Q_affinities
